@@ -45,3 +45,24 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# =========================
+# Added manually after creating repo
+# =========================
+
+# Binary files
+*.class
+
+# Eclipse Config files
+.project
+.classpath
+
+# Micellaneous 
+reports/pmd-report.txt
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.m2e.core.prefs
+target/classes/META-INF/maven/org.purl.beroca.crawler/hello-web-crawler/pom.xml
+target/classes/META-INF/maven/org.purl.beroca.crawler/hello-web-crawler/pom.properties
+target/classes/META-INF/MANIFEST.MF
+target/classes/google-java-developer.html
+
