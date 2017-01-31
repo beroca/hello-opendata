@@ -8,11 +8,12 @@ Please create an easily compilable project (e.g. maven/gradle/Intellij/Eclipse p
 Please do not spend more than 3 hours on the task. We expect incomplete solutions - the task is designed that way.
 
 The command-line program should do the following:
-0. Read a string (search term) from standard input
+
+1. Read a string (search term) from standard input
 1. Get a Google result page for the search term
-2. Extract main result links from the page
-3. Download the respective pages and extract the names of Javascript libraries used in them
-4. Print top 5 most used libraries to standard output
+1. Extract main result links from the page
+1. Download the respective pages and extract the names of Javascript libraries used in them
+1. Print top 5 most used libraries to standard output
 
 ### Bonus steps
 - write tests or think about the approach for testing your code
