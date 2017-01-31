@@ -1,4 +1,6 @@
-# Task - Web crawler
+# Web Crawler Exercise
+View on GitHub: <https://github.com/beroca/hello-web-crawler.git>
+
 The aim of this test assignment is to write a program in Java which counts top Javascript libraries used in web pages found on Google.
 
 ## Prerequisites
