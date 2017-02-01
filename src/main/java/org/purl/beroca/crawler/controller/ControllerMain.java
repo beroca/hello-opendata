@@ -20,8 +20,11 @@ import org.purl.beroca.crawler.model.SortedSetOfLibraryRank;
  */
 public class ControllerMain {
 
-	private final static Logger LOGGER = Logger.getLogger(ControllerMain.class.getName());
-	private final static Level logLevel = Level.ALL;
+	private static Logger LOGGER = Logger.getLogger(ControllerMain.class.getName());
+	private final static Level logLevel = Level.WARNING;								// default value
+	
+	private static String searchHits = "5";											// default value
+	private static String searchTerm = "bootstrap";									// default value
 
 	private static GoogleCrawlerExtended urlParser = new GoogleCrawlerExtended();
 
@@ -40,19 +43,21 @@ public class ControllerMain {
 			}
 		}
 
-		final String searchHits = "3";
-		final String searchTerm = URLEncoder.encode("bootstrap", "UTF-8");
-		final String query = "https://www.google.com/search?q=" + searchTerm + "&num=" + searchHits;
+		final String query = "https://www.google.com/search?q=" + 
+				URLEncoder.encode(searchTerm, "UTF-8") + 
+				"&num=" + searchHits;
+		System.out.println("# Search Query: " + query);
 
-		System.out.println("Search Query: " + query);
 		final String resultPage = urlParser.getSearchContent(query);
 		final List<String> resultLinks = urlParser.parseLinks(resultPage);
-		System.out.println("Results: " + resultLinks.size() + " URLs");
+		System.out.println("# URLs found: " + resultLinks.size());
 
+		// Implementation 1
 		RankedStringSet sortedMap = new SortedMapOfLibraryRank();
 		System.out.println( "\n# Implementation: " + sortedMap.getClass().getName() );
 		run(resultLinks, sortedMap);
 
+		// Implementation 2
 		RankedStringSet sortedSet = new SortedSetOfLibraryRank();
 		System.out.println( "\n# Implementation: " + sortedSet.getClass().getName() );
 		run(resultLinks, sortedSet);
@@ -62,17 +67,15 @@ public class ControllerMain {
 
 		// Implementation dependent
 		int countLibs = 0;
-		int linkCount = 0;
 		for (String link : resultLinks) {
-			LOGGER.log(Level.INFO, "URL[" + (++linkCount) + "]: " + link);
 			final String resultLinkPage = urlParser.getSearchContent(link);
 			final List<String> resultLinkPageLibs = urlParser.parseLibraries(resultLinkPage);
 			countLibs += implementaion.updateRankOfString(link, resultLinkPageLibs);
 			System.out.println();
 		}
+		System.out.println("# Libs found: " + countLibs + " in " + resultLinks.size() + " URLs");
 
 		implementaion.sortRankOfStringSet();
 		implementaion.printRankOfLibs();
-		LOGGER.log(Level.INFO, "Raw Libs: " + countLibs);
 	}
 }

@@ -19,7 +19,7 @@ import org.purl.beroca.crawler.controller.ControllerMain;
  */
 public class SortedSetOfLibraryRank implements RankedStringSet {
 
-	private final static Logger LOGGER = Logger.getLogger(ControllerMain.class.getName());
+	private static Logger LOGGER = Logger.getLogger(ControllerMain.class.getName());
 
 	private Map<String, Integer> mapOfLibToRank;
 	private SortedSet<Integer> setOfRankSorted;
@@ -50,11 +50,27 @@ public class SortedSetOfLibraryRank implements RankedStringSet {
 		}
 		return rank;
 	}
+	
+	private void printLibsAsStored() {
+
+		// Print libs as they are stored
+		System.out.println("\n# Libs BEFORE ranking");
+
+		// Java 7
+		int libCount = 0;
+		for (Map.Entry<String, Integer> entry : mapOfLibToRank.entrySet()) {
+			System.out.println("Rank[" + entry.getValue() + "]: Lib[" + (++libCount) + "]: " + entry.getKey());
+		}
+
+		// Java 8 only !!
+		// jsLibRank.forEach( (k,v)->System.out.println("JS Lib: " + k + "
+		// Count: " + v) );
+	}
 
 	public void printRankOfLibs() {
 
 		final int totalLibs = mapOfLibToRank.size();
-		System.out.println("Number of Libs found: " + totalLibs);
+		System.out.println("# Total Libs found: " + totalLibs);
 
 		if (totalLibs <= 0) {
 			return;
@@ -74,19 +90,9 @@ public class SortedSetOfLibraryRank implements RankedStringSet {
 			}
 		}
 
-		if (LOGGER.getLevel().intValue() <= Level.INFO.intValue()) {
-			// Print libs as they are stored
-			System.out.println("Raw Libs found (not ranked)");
-
-			// Java 7
-			int libCount = 0;
-			for (Map.Entry<String, Integer> entry : mapOfLibToRank.entrySet()) {
-				System.out.println("Rank[" + entry.getValue() + "]: Lib[" + (++libCount) + "]: " + entry.getKey());
-			}
-
-			// Java 8 only !!
-			// jsLibRank.forEach( (k,v)->System.out.println("JS Lib: " + k + "
-			// Count: " + v) );
+		if (LOGGER.getLevel().intValue() <= Level.FINER.intValue())
+		{
+			printLibsAsStored();
 		}
 	}
 

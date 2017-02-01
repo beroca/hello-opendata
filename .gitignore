@@ -66,3 +66,4 @@ target/classes/META-INF/maven/org.purl.beroca.crawler/hello-web-crawler/pom.prop
 target/classes/META-INF/MANIFEST.MF
 target/classes/google-java-developer.html
 
+/target/

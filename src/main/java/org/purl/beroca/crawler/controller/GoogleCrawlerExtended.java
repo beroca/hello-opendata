@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public class GoogleCrawlerExtended {
 
 	// Obtain a suitable logger.
-	private final static Logger LOGGER = Logger.getLogger(ControllerMain.class.getName());
+	private static Logger LOGGER = Logger.getLogger(ControllerMain.class.getName());
 	
 	public static enum PATTERN_TYPE {
 		PATTERN_GOOGLE_RESULT,
@@ -100,8 +100,6 @@ public class GoogleCrawlerExtended {
 	 */
 	public List<String> parseLinks(final String html) throws Exception {
 
-		LOGGER.setLevel( Level.ALL );
-
 		List<String> result = new ArrayList<String>();
 
 		// Example pattern of Google Search Result
@@ -116,8 +114,8 @@ public class GoogleCrawlerExtended {
 		while (m.find()) {
 			String domainName = m.group(0).trim();
 
-			// LOGGER.log(Level.FINER, "URL[" + (linkCount+1) + "]: " + domainName);
-			LOGGER.finer("URL[" + (linkCount+1) + "]: " + domainName);
+			LOGGER.log(Level.FINER, "URL[" + (linkCount+1) + "]: " + domainName);
+			// LOGGER.finer("URL[" + (linkCount+1) + "]: " + domainName);
 			/** remove the unwanted text */
 			domainName = domainName.substring(domainName.indexOf("/url?q=") + 7);
 			domainName = domainName.substring(0, domainName.indexOf("&amp;"));

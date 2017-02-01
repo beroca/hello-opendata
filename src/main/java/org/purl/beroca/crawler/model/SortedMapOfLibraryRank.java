@@ -14,12 +14,13 @@ import org.purl.beroca.crawler.controller.ControllerMain;
 
 public class SortedMapOfLibraryRank implements RankedStringSet {
 
-	private final static Logger LOGGER = Logger.getLogger(ControllerMain .class.getName());
+	private static Logger LOGGER = Logger.getLogger(ControllerMain .class.getName());
 
 	private Map<String, ArrayList<String>> mapLibToURL;
 	private SortedMap<Integer, ArrayList<String>> mapRankToLib;
 
 	public SortedMapOfLibraryRank() {
+		
 		this.mapLibToURL = new HashMap<String, ArrayList<String>>();
 		this.mapRankToLib = new TreeMap<Integer, ArrayList<String>>();
 	}
@@ -70,13 +71,30 @@ public class SortedMapOfLibraryRank implements RankedStringSet {
 		}
 	}
 
+	private void printLibsAsStored() {
+		
+		// Print libs as they are stored on Map
+		System.out.println("\n# Libs found BEFORE ranking");
+
+		int libCount = 0;
+		for (Map.Entry<String, ArrayList<String>> entry : mapLibToURL.entrySet()) {
+			System.out.println(
+					"Rank[" + entry.getValue().size() + 
+					"]: Lib[" + (++libCount) + "]: " + entry.getKey()
+					);
+		}
+		// Java 8 only !!
+		// jsLibRank.forEach( (k,v)->System.out.println("JS Lib: " + k + "
+		// Count: " + v) );	
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.purl.beroca.crawler.RankedStringSet#printRankOfLibs()
 	 */
 	public void printRankOfLibs() {
 
 		final int totalLibs = mapRankToLib.size();
-		System.out.println("Number of Libs found: " + totalLibs);
+		System.out.println("# Total Libs found: " + totalLibs);
 
 		if(totalLibs <= 0) {
 			return;
@@ -94,29 +112,17 @@ public class SortedMapOfLibraryRank implements RankedStringSet {
 			for (String lib : listOfLibs) {
 
 				System.out.println("Rank[" + rank + "]: Lib[" + (++libCount) + "]: " + lib);
-				if (LOGGER.getLevel().intValue() <= Level.INFO.intValue()) {
 
-					ArrayList<String> listOfURLs = mapLibToURL.get(lib);
-					for (String url : listOfURLs) {
-						System.out.println("- URLs: " + url);
-					}
+				ArrayList<String> listOfURLs = mapLibToURL.get(lib);
+				for (String url : listOfURLs) {
+					System.out.println("- URL: " + url);
 				}
 			}
 		}
 
-		if ( LOGGER.getLevel().intValue() <= Level.INFO.intValue() )
+		if ( LOGGER.getLevel().intValue() <= Level.FINER.intValue() )
 		{
-			System.out.println("Raw Libs (not ranked)");
-			// Print libs as they are stored
-
-			int libCount = 0;
-			for (Map.Entry<String, ArrayList<String>> entry : mapLibToURL.entrySet()) {
-				System.out
-						.println("Rank[" + entry.getValue().size() + "]: Lib[" + (++libCount) + "]: " + entry.getKey());
-			}
-			// Java 8 only !!
-			// jsLibRank.forEach( (k,v)->System.out.println("JS Lib: " + k + "
-			// Count: " + v) );
+			printLibsAsStored();
 		}
 	}
 
