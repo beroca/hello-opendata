@@ -63,6 +63,20 @@ The project source code is organized as follows:
 The relevant sources to accomplish the goal of the exercise (i.e., they delimit the boundary of the possible application code paths) are located in the package:
 * ./org/purl/beroca/crawler/
 
+**Attribution to External Examples**
+
+The other packages on the ./src/main/java/ branch of the project, corresponds to packages available on the Web that were evaluated to approach how to handle the initial connection to Google Search and the parsing of the relevant links on the response page. The code path of the main application of the project does *not* use them but they are included for credit attribution and the technical comparison of the different approaches.
+
+The approach used in each of these packages could be summarize as follows:
+* ./admfactory/javaapps/GoogleCrawler.java: 
+  * Nice and simple. 
+  * Uses only standard Java JDK. 
+  * It relies on HTML tags to find the Google Search result links. That has pros and cons. 
+  * The GoogleCrawlerExtended.java class that is part of the project application code path is an extension of this source, adding additional URL validation features and more granular exception handling. 
+* ./journaldev/jsoup/GoogleSearchJava.java:
+* ./oracle/docs/javase/tutorial/URLReader.java: 
+* ./stackoverflow/questions/_10257276/GoogleCustomSearch.java: 
+
 The package contains a *controller* and a *model* sub-packages. The structure is motivated on the MVC pattern even though the pattern applies only partially to this Web Crawler application.  
 
 **Controller (Main Application)**
@@ -116,9 +130,9 @@ The class SortedMapOfLibraryRank.java was the second approach to implement the r
 - Use of Java Standard Libraries
 
 * Use of wget or curl
-** Google Search rejects programmatic access by default.
-** robots.txt of Google Search
-** Setting the right User Agent
+  * Google Search rejects programmatic access by default.
+  * robots.txt of Google Search
+  * Setting the right User Agent
 
 - Encode invalid characters in the string used to build the search URL (e.g. spaces, punctuation, etc.).
 
@@ -186,5 +200,13 @@ Using 2 Maps.
 
 ### Improvements
 - Complete JUnit test cases - Test Driven Development
+  - Additional testing of the parsing methods.
+  - Additional testing of the URL validation method.
+- Investigate parsing of Google number of result. Expected: N, Actual: (N - x)
 - Use of `<h3>` tag versus "/link:/" attribute to find Google Search result links.
 - Add a Comparator implementation to handle ranking => order Map by value.
+- Re-organize main() method.
+- Remove dependency between *model* classes and ControllerMain.java class due to the LOGGER service.
+- Consider override toString() method instead of custom "print" methods.
+
+
