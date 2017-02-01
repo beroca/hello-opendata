@@ -6,8 +6,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.*;
@@ -80,8 +82,7 @@ public class GoogleCrawlerExtended {
 		
 		String pageContent = ""; // <===== return String =====
 
-		UrlValidator urlValidator = new UrlValidator();
-		if (urlValidator.isValid(path)) 
+		if( urlIsValid(path) ) 
 		{
 			URL url = null;
 			try {
@@ -119,9 +120,9 @@ public class GoogleCrawlerExtended {
 				System.out.println("# Skipping URL: " + path + " => FAILED connection.getInputStream()");
 			}
 		}
-		else { // <===== Invalid URL
-			
-			System.out.println("# Skipping URL: " + path + " => FAILED: UrlValidator.isValid()");
+		else // <===== Invalid URL ===== 
+		{
+			System.out.println("# Skipping URL: " + path + " => FAILED: urlIsValid()");
 		}
 
 		return pageContent;
@@ -203,5 +204,38 @@ public class GoogleCrawlerExtended {
 			libCount++;
 		}
 		return listOfLibs;
+	}
+	
+	private boolean urlIsValid(String url) {
+		
+		LOGGER.log(Level.INFO, "Validate URL: " + url);
+
+		UrlValidator urlValidator = new UrlValidator();
+		if (urlValidator.isValid(url)) 
+		{
+			return true;
+		}
+		else 
+		{
+			String urlDecoded = null;
+			try {
+				urlDecoded = URLDecoder.decode(url, "UTF-8");
+			} 
+			catch (UnsupportedEncodingException e) 
+			{
+				LOGGER.log(Level.SEVERE, e.getClass().getSimpleName() + ": " + e.getMessage()); // , e);
+				System.out.println("# Skipping URL: " + url + " => FAILED URLDecoder.decode()");
+			}
+			
+			if( urlValidator.isValid(urlDecoded)) {
+				return true;
+			}
+			else
+			{
+				LOGGER.log(Level.SEVERE, "Skipping URL: " + urlDecoded + " => FAILED UrlValidator.isValid()");
+				System.out.println("# Skipping URL: " + urlDecoded + " => FAILED UrlValidator.isValid()");
+				return false;
+			}
+		}
 	}
 }

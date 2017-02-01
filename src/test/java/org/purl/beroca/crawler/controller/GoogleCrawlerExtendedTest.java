@@ -34,12 +34,12 @@ public class GoogleCrawlerExtendedTest {
 		
 		// URL2 => invalid => decode => valid
 		final String URL2_INVALID_BEFORE_DECODING = 
-				"http://www.storviltskolen.no/gallery2/main.php%3Fg2_view%3Dcore.DownloadItem%26g2_itemId%3D2068%26g2_serialNumber%3D4";
+				"https://www.youtube.com/watch%3Fv%3DDe5VlKfmvXg";
 		final String URL2_VALID_AFTER_DECODING = 
-				"http://www.storviltskolen.no/gallery2/main.php?g2_view=core.DownloadItem&g2_itemId=2068&g2_serialNumber=4";
+				"https://www.youtube.com/watch?v=De5VlKfmvXg";
 		
 		assertEquals("URL2_INVALID", "", crawlerActual.getSearchContent(URL2_INVALID_BEFORE_DECODING));
-		// assertNotEquals("URL2_VALID", "", crawlerActual.getSearchContent(URL2_VALID_AFTER_DECODING));
+		assertNotEquals("URL2_VALID", "", crawlerActual.getSearchContent(URL2_VALID_AFTER_DECODING));
 		
 		// URL3 => valid => throws javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
 		final String URL3_SSL_EXCEPTION = 

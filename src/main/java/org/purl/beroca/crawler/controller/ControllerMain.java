@@ -36,13 +36,6 @@ public class ControllerMain {
 
 		System.out.println("# Google Search Parser - SortedMap + SortedSet");
 
-		LOGGER.setLevel(ControllerMain.logLevel);
-		for (Handler h : LOGGER.getParent().getHandlers()) {
-			if (h instanceof ConsoleHandler) {
-				h.setLevel(ControllerMain.logLevel);
-			}
-		}
-		
 		// Get search string
 		Scanner in = null;
 		try {
@@ -55,12 +48,35 @@ public class ControllerMain {
 			int intHits = in.nextInt();
 			searchHits = ( intHits > 0 && intHits <= 50 ? String.valueOf(intHits) : "1" );
 			
+			System.out.println("# Enter LOGGER Level: (default: 3 => WARNING");
+			System.out.println("[ 1 => ALL, 2 => INFO, 3 => WARNING ]:");
+			int intLogLevel = in.nextInt();
+			switch (intLogLevel) {
+			case 1:
+				ControllerMain.logLevel = Level.ALL;
+				break;
+			case 2:
+				ControllerMain.logLevel = Level.INFO;
+				break;
+			case 3:
+				break;
+			default:
+				System.out.println("Invalid level: Using default => WARNING");
+			}
+			
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			e.printStackTrace();
 		} finally {
 			if ( in != null ) {
 				in.close();
+			}
+		}
+		
+		LOGGER.setLevel(ControllerMain.logLevel);
+		for (Handler h : LOGGER.getParent().getHandlers()) {
+			if (h instanceof ConsoleHandler) {
+				h.setLevel(ControllerMain.logLevel);
 			}
 		}
 		
