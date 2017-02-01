@@ -28,4 +28,4 @@ The command-line program should do the following:
 
 # Progress Reports
 This section lists relevant progress reports of the project.  
-* [2017.02.01](./src/main/site/md/progress-report-20170201.md): Initial version.  
+* [2017.02.01](./src/site/md/progress-report-20170201.md): Initial version.  
