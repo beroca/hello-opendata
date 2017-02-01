@@ -96,13 +96,16 @@ The class SortedMapOfLibraryRank.java was the second approach to implement the r
 
 ## Draft notes
 
-- TODO: Do not forget attribution of reused code.
+- **TODO: Do not forget attribution of reused code. !!!**
 
 - URL encode / decode
+- org.apache.commons.validator.routines.UrlValidator
+
+- LOOGER facility
 
 - JUnit tests
 
-- org.apache.commons.validator.routines.UrlValidator
+- 2 implementations of the solution => Interface: RankedStringSet.java 
 
 - Added PMD. A static Java source code analyzer.
 
@@ -112,15 +115,15 @@ The class SortedMapOfLibraryRank.java was the second approach to implement the r
 - Use of Google Custom Search.
 - Use of Java Standard Libraries
 
-- Use of wget or curl
--- Google Search rejects programmatic access by default.
--- robots.txt of Google Search
--- Setting the right User Agent
+* Use of wget or curl
+** Google Search rejects programmatic access by default.
+** robots.txt of Google Search
+** Setting the right User Agent
 
 - Encode invalid characters in the string used to build the search URL (e.g. spaces, punctuation, etc.).
-- Use of `<h3>` tag versus "link:" attribute to find Google Search result links.
 
--- Error example
+- Error example
+
 ```
 Jan 29, 2017 4:37:20 AM org.purl.beroca.sandbox.rejected.GoogleCrawlerMapAndSet parseLinks
 INFO: [9] https://twitter.com/angularjs%3Flang%3Dde
@@ -134,20 +137,22 @@ Exception in thread "main" java.io.FileNotFoundException: https://twitter.com/an
 	at org.purl.beroca.sandbox.rejected.GoogleCrawlerMapAndSet.main(GoogleCrawler.java:187)
 ```
 
--- Error example
+- Error example
+
 ```
 Request URL:https://twitter.com/angularjs%3Flang%3Dde&amp;sa=U&amp;ved=0ahUKEwiEpPSlt-bRAhXLKMAKHX6FBwEQFghNMAg&amp;usg=AFQjCNG-_mNxVHE0Bi30_wqZZxSNW_WM-g
 Request Method:GET
 Status Code:404 
 ```
+
 ### Cardinality
 Relationships between the 3 main entities relevant in the solution.
 - URL, JavaScript library, Ranking value.
-- URL, Js-lib: 1-to-many.
-- Js-lib, Raking value: many-to-1
+- URL, JS-lib: 1-to-many.
+- JS-lib, Raking value: many-to-1
 
 The relationship between a ranking value and a JavaScript library is "1-to-many".
-That is, a given ranking value (1 occurrance, 2 occurrences, ..., n occurrencies), can have *many* Javascipt libraries.
+That is, a given ranking value (1 occurrence, 2 occurrences, ..., n occurrences), can have *many* JavaScript libraries.
 
 Keeping the Js-libs always sorted or not.
 
@@ -180,4 +185,6 @@ Using 2 Maps.
 - Order of Libraries relevant!
 
 ### Improvements
-- Test Driven Development
+- Complete JUnit test cases - Test Driven Development
+- Use of `<h3>` tag versus "/link:/" attribute to find Google Search result links.
+- Add a Comparator implementation to handle ranking => order Map by value.
