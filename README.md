@@ -28,6 +28,14 @@ The command-line program should do the following:
 
 # Proposed Solution
 
+TODO: Do not forget attribution of reused code.
+
+URL encode / decode
+
+JUnit tests
+
+org.apache.commons.validator.routines.UrlValidator
+
 ## Challenges and Design Choices
 
 - Added PMD. A static Java source code analyzer.

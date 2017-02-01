@@ -14,14 +14,17 @@ import java.util.logging.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.validator.routines.UrlValidator;
+
+
+
 public class GoogleCrawlerExtended {
 
 	// Obtain a suitable logger.
 	private static Logger LOGGER = Logger.getLogger(ControllerMain.class.getName());
-	
+
 	public static enum PATTERN_TYPE {
-		PATTERN_GOOGLE_RESULT,
-		PATTERN_JAVASCRIPT_LIBRARY
+		PATTERN_GOOGLE_RESULT, PATTERN_JAVASCRIPT_LIBRARY
 	};
 
 	/**
@@ -64,30 +67,64 @@ public class GoogleCrawlerExtended {
 	 *            the google search query
 	 * @return the content as {@link String} object
 	 * @throws Exception
-	 *  	{@lnk SocketTimeoutException} can be thrown when reading from the returned input stream if the read 
-	 *  	timeout expires before data is available for read.
-	 *  	{@link IOException} - if an I/O error occurs while creating the input stream.
-	 *  	{@link UnknownServiceException} - if the protocol does not support input.
+	 *             {@lnk SocketTimeoutException} can be thrown when reading from
+	 *             the returned input stream if the read timeout expires before
+	 *             data is available for read. {@link IOException} - if an I/O
+	 *             error occurs while creating the input stream.
+	 *             {@link UnknownServiceException} - if the protocol does not
+	 *             support input.
 	 */
 	public String getSearchContent(final String path) throws Exception {
 
-		final String agent = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
-		final URL url = new URL(path);
-		final URLConnection connection = url.openConnection();
-		/**
-		 * User-Agent is mandatory otherwise Google will return HTTP response
-		 * code: 403
-		 */
-		connection.setRequestProperty("User-Agent", agent);
-		try {
-			final InputStream stream = connection.getInputStream();
-			return getString(stream);
+		// Very DEFENSIVE implementation
+		
+		String pageContent = ""; // <===== return String =====
+
+		UrlValidator urlValidator = new UrlValidator();
+		if (urlValidator.isValid(path)) 
+		{
+			URL url = null;
+			try {
+				url = new URL(path);
+				
+			} catch (Exception e) {
+				LOGGER.log(Level.SEVERE, e.getClass().getSimpleName() + ": " + e.getMessage()); // , e);
+				System.out.println("# Skipping URL: " + path + " => FAILED: new URL(path)");
+			}
+
+			URLConnection connection = null;
+			try {
+				connection = url.openConnection();
+
+				// User-Agent is mandatory otherwise Google will return:
+				// HTTP response code: 403
+				connection.setRequestProperty(
+						"User-Agent", 
+						"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+						);
+				
+			} catch (Exception e) {
+				LOGGER.log(Level.SEVERE, e.getClass().getSimpleName() + ": " + e.getMessage()); // , e);
+				System.out.println("# Skipping URL: " + path + " => FAILED url.openConnection()");
+			}
+
+			InputStream stream = null;
+			try {
+				stream = connection.getInputStream();
+				
+				pageContent = getString(stream); // <===== INTENDED CODE PATH =====
+				
+			} catch (Exception e) {
+				LOGGER.log(Level.SEVERE, e.getClass().getSimpleName() + ": " + e.getMessage()); // , e);
+				System.out.println("# Skipping URL: " + path + " => FAILED connection.getInputStream()");
+			}
 		}
-		catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			e.printStackTrace();
+		else { // <===== Invalid URL
+			
+			System.out.println("# Skipping URL: " + path + " => FAILED: UrlValidator.isValid()");
 		}
-		return "";
+
+		return pageContent;
 	}
 
 	/**
@@ -103,7 +140,8 @@ public class GoogleCrawlerExtended {
 		List<String> result = new ArrayList<String>();
 
 		// Example pattern of Google Search Result
-		// <h3 class="r"><a href="/url?q=http://getbootstrap.com/&amp;sa=U&amp;ved=0ahUKEwiW9ZjFzuzRAhVIXhQKHdM9CvsQFggVMAA&amp;usg=AFQjCNHYUu9OcB7laJwyCqUFrt06xL-OfA">
+		// <h3 class="r"><a
+		// href="/url?q=http://getbootstrap.com/&amp;sa=U&amp;ved=0ahUKEwiW9ZjFzuzRAhVIXhQKHdM9CvsQFggVMAA&amp;usg=AFQjCNHYUu9OcB7laJwyCqUFrt06xL-OfA">
 		//
 		final String pattern1 = "<h3 class=\"r\"><a href=\"/url?q=";
 		final String pattern2 = "\">";
@@ -114,12 +152,12 @@ public class GoogleCrawlerExtended {
 		while (m.find()) {
 			String domainName = m.group(0).trim();
 
-			LOGGER.log(Level.FINER, "URL[" + (linkCount+1) + "]: " + domainName);
+			LOGGER.log(Level.FINER, "URL[" + (linkCount + 1) + "]: " + domainName);
 			// LOGGER.finer("URL[" + (linkCount+1) + "]: " + domainName);
 			/** remove the unwanted text */
 			domainName = domainName.substring(domainName.indexOf("/url?q=") + 7);
 			domainName = domainName.substring(0, domainName.indexOf("&amp;"));
-			LOGGER.log(Level.FINE, "URL[" + (linkCount+1) + "]: " + domainName);
+			LOGGER.log(Level.FINE, "URL[" + (linkCount + 1) + "]: " + domainName);
 
 			result.add(domainName);
 			System.out.println("URL[" + (++linkCount) + "]: " + domainName);
@@ -132,11 +170,10 @@ public class GoogleCrawlerExtended {
 	 * 
 	 * @param html
 	 *            the page
-	 * @param url 
+	 * @param url
 	 * @param jsLibs
 	 *            the global map with all the JS Libs and the count
-	 * @return 
-	 *            the number as {@link Integer} of JS Libs found
+	 * @return the number as {@link Integer} of JS Libs found
 	 * @throws Exception
 	 */
 	public List<String> parseLibraries(String resultPageOfLink) throws Exception {
@@ -144,7 +181,8 @@ public class GoogleCrawlerExtended {
 		List<String> listOfLibs = new ArrayList<String>();
 
 		// Example pattern:
-		// <script src="https://cdn.rawgit.com/pamelafox/a8b77c43f56da1753348/raw/slideshow.js"></script>
+		// <script
+		// src="https://cdn.rawgit.com/pamelafox/a8b77c43f56da1753348/raw/slideshow.js"></script>
 		//
 		final String pattern1 = "<script src=\"";
 		final String pattern2 = "\"";
@@ -158,11 +196,11 @@ public class GoogleCrawlerExtended {
 			LOGGER.log(Level.FINER, "Lib[" + libCount + "]: " + domainName);
 			/** remove the unwanted text */
 			domainName = domainName.substring("<script src=\"".length());
-			domainName = domainName.substring(0, domainName.length()-1);
+			domainName = domainName.substring(0, domainName.length() - 1);
 			LOGGER.log(Level.FINE, "Lib[" + libCount + "]: " + domainName);
 
 			listOfLibs.add(domainName);
-			libCount++; 
+			libCount++;
 		}
 		return listOfLibs;
 	}

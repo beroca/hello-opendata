@@ -5,6 +5,7 @@ package org.purl.beroca.crawler.controller;
 
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -21,11 +22,10 @@ import org.purl.beroca.crawler.model.SortedSetOfLibraryRank;
 public class ControllerMain {
 
 	private static Logger LOGGER = Logger.getLogger(ControllerMain.class.getName());
-	private final static Level logLevel = Level.WARNING;								// default value
+	private static Level logLevel = Level.WARNING;									// default value
 	
 	private static String searchHits = "5";											// default value
 	private static String searchTerm = "bootstrap";									// default value
-
 	private static GoogleCrawlerExtended urlParser = new GoogleCrawlerExtended();
 
 	/**
@@ -42,7 +42,28 @@ public class ControllerMain {
 				h.setLevel(ControllerMain.logLevel);
 			}
 		}
+		
+		// Get search string
+		Scanner in = null;
+		try {
+			in = new Scanner(System.in);
 
+			System.out.println("# Enter search keyword(s): ");
+			searchTerm = in.nextLine().trim();
+
+			System.out.println("# Enter number of search results [1, 50]: ");
+			int intHits = in.nextInt();
+			searchHits = ( intHits > 0 && intHits <= 50 ? String.valueOf(intHits) : "1" );
+			
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			e.printStackTrace();
+		} finally {
+			if ( in != null ) {
+				in.close();
+			}
+		}
+		
 		final String query = "https://www.google.com/search?q=" + 
 				URLEncoder.encode(searchTerm, "UTF-8") + 
 				"&num=" + searchHits;
@@ -54,12 +75,12 @@ public class ControllerMain {
 
 		// Implementation 1
 		RankedStringSet sortedMap = new SortedMapOfLibraryRank();
-		System.out.println( "\n# Implementation: " + sortedMap.getClass().getName() );
+		System.out.println( "\n# Implementation: " + sortedMap.getClass().getSimpleName() );
 		run(resultLinks, sortedMap);
 
 		// Implementation 2
 		RankedStringSet sortedSet = new SortedSetOfLibraryRank();
-		System.out.println( "\n# Implementation: " + sortedSet.getClass().getName() );
+		System.out.println( "\n# Implementation: " + sortedSet.getClass().getSimpleName() );
 		run(resultLinks, sortedSet);
 	}
 
