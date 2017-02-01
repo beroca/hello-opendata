@@ -1,14 +1,108 @@
 # Progress Report 2017.02.01
 
-TODO: Do not forget attribution of reused code.
+This report describes the initial release of the Web Crawler exercise.
 
-URL encode / decode
+**Project Structure**
 
-JUnit tests
+The project source code is organized as follows:
 
-org.apache.commons.validator.routines.UrlValidator
+~~~~
+.
+├── pom.xml
+├── README.md
+├── src
+│   ├── main
+│   │   └── java
+│   │       ├── com
+│   │       │   ├── admfactory
+│   │       │   │   └── javaapps
+│   │       │   │       └── GoogleCrawler.java
+│   │       │   ├── journaldev
+│   │       │   │   └── jsoup
+│   │       │   │       └── GoogleSearchJava.java
+│   │       │   ├── oracle
+│   │       │   │   └── docs
+│   │       │   │       └── javase
+│   │       │   │           └── tutorial
+│   │       │   │               └── URLReader.java
+│   │       │   └── stackoverflow
+│   │       │       └── questions
+│   │       │           └── _10257276
+│   │       │               └── GoogleCustomSearch.java
+│   │       └── org
+│   │           └── purl
+│   │               └── beroca
+│   │                   ├── crawler
+│   │                   │   ├── controller
+│   │                   │   │   ├── ControllerMain.java
+│   │                   │   │   └── GoogleCrawlerExtended.java
+│   │                   │   └── model
+│   │                   │       ├── RankedStringSet.java
+│   │                   │       ├── SortedMapOfLibraryRank.java
+│   │                   │       └── SortedSetOfLibraryRank.java
+│   │                   └── sandbox
+│   │                       └── rejected
+│   │                           └── GoogleCrawlerMapAndSet.java
+│   ├── site
+│   │   └── md
+│   │       └── progress-report-20170201.md
+│   └── test
+│       └── java
+│           └── org
+│               └── purl
+│                   └── beroca
+│                       └── crawler
+│                           ├── controller
+│                           │   └── GoogleCrawlerExtendedTest.java
+│                           └── model
+│                               ├── SortedMapOfLibraryRankTest.java
+│                               └── SortedSetOfLibraryRankTest.java
+└── target
+~~~~
 
-## Challenges and Design Choices
+The relevant sources to accomplish the goal of the exercise (i.e., they delimit the boundary of the possible application code paths) are located in the package:
+* ./org/purl/beroca/crawler/
+
+The package contains a *controller* and a *model* sub-packages. The structure is motivated on the MVC pattern even though the pattern applies only partially to this Web Crawler application.  
+
+**Controller (Main Application)**
+
+The main application entry point is:
+* ./org/purl/beroca/crawler/controller/ControllerMain.java
+
+Upon running the application, 3 input parameters are requested on the stdin:
+* The keywords used for the Google Search - required
+* The number of results to consider in the search response - optional: default: 10, max: 50
+* The LOGGER level to display debugging information during run-time - optional: default: WARNING
+
+The ControllerMain.java relies uses GoogleCrawlerExtended.java to: 
+* Validate URL syntax
+* Parse Google Search response page to get the result links
+* Parse the page of each search result link to get the JavaScript libraries
+
+Following the spirit of the MVC pattern, the *controller* classes, handle the interaction with the user (or client), and process the HTTP requests and responses of the application.
+
+**Model**
+
+The *model* package includes 2 classes to manage and structure the application data:
+* SortedSetOfLibraryRank.java
+* SortedMapOfLibraryRank.java
+
+The 2 classes provides 2 different implementation approaches to accomplish the goal of the exercise. That is, to rank all the JavaScript libraries found in the pages that were part of the Google Search result.
+
+The class SortedSetOfLibraryRank.java was the first approach to implement the ranking of the JavaScript libraries. It is fairly simple, somewhat brute force and O(n^2), so it would not scale for a very large number of them. It remains in the application solely for illustrative purposes.
+
+The class SortedMapOfLibraryRank.java was the second approach to implement the ranking of the JavaScript libraries. It is more elaborated. It allows more features on the underlying data, and it keeps the libraries ranked upon insertion.
+
+## Draft notes
+
+- TODO: Do not forget attribution of reused code.
+
+- URL encode / decode
+
+- JUnit tests
+
+- org.apache.commons.validator.routines.UrlValidator
 
 - Added PMD. A static Java source code analyzer.
 
@@ -48,11 +142,11 @@ Status Code:404
 ```
 ### Cardinality
 Relationships between the 3 main entities relevant in the solution.
-- URL, Javascript library, Ranking value.
+- URL, JavaScript library, Ranking value.
 - URL, Js-lib: 1-to-many.
 - Js-lib, Raking value: many-to-1
 
-The relationship between a ranking value and a Javascript library is "1-to-many".
+The relationship between a ranking value and a JavaScript library is "1-to-many".
 That is, a given ranking value (1 occurrance, 2 occurrences, ..., n occurrencies), can have *many* Javascipt libraries.
 
 Keeping the Js-libs always sorted or not.

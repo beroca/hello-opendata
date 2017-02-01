@@ -24,7 +24,7 @@ public class ControllerMain {
 	private static Logger LOGGER = Logger.getLogger(ControllerMain.class.getName());
 	private static Level logLevel = Level.WARNING;									// default value
 	
-	private static String searchHits = "5";											// default value
+	private static String searchHits = "10";											// default value
 	private static String searchTerm = "bootstrap";									// default value
 	private static GoogleCrawlerExtended urlParser = new GoogleCrawlerExtended();
 
