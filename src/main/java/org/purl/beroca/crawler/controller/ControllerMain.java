@@ -28,15 +28,8 @@ public class ControllerMain {
 	private static String searchTerm = "bootstrap";									// default value
 	private static GoogleCrawlerExtended urlParser = new GoogleCrawlerExtended();
 
-	/**
-	 * @param args
-	 * @throws Exception
-	 */
-	public static void main(String[] args) throws Exception {
+	private static void getMainOptions() {
 
-		System.out.println("# Google Search Parser - SortedMap + SortedSet");
-
-		// Get search string
 		Scanner in = null;
 		try {
 			in = new Scanner(System.in);
@@ -72,7 +65,19 @@ public class ControllerMain {
 				in.close();
 			}
 		}
+	}
+
+	/**
+	 * @param args
+	 * @throws Exception
+	 */
+	public static void main(String[] args) throws Exception {
+
+		System.out.println("# Google Search Parser - SortedMap + SortedSet");
+
+		getMainOptions();
 		
+		// Configure LOGGER messages
 		LOGGER.setLevel(ControllerMain.logLevel);
 		for (Handler h : LOGGER.getParent().getHandlers()) {
 			if (h instanceof ConsoleHandler) {
@@ -80,6 +85,7 @@ public class ControllerMain {
 			}
 		}
 		
+		// Send query request to Google Search and process response
 		final String query = "https://www.google.com/search?q=" + 
 				URLEncoder.encode(searchTerm, "UTF-8") + 
 				"&num=" + searchHits;
@@ -100,7 +106,7 @@ public class ControllerMain {
 		run(resultLinks, sortedSet);
 	}
 
-	public static void run(final List<String> resultLinks, RankedStringSet implementaion) throws Exception {
+	private static void run(final List<String> resultLinks, RankedStringSet implementaion) throws Exception {
 
 		// Implementation dependent
 		int countLibs = 0;
