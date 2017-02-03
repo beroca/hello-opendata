@@ -191,12 +191,14 @@ It works but it requires O(n^2)
 Using 2 Maps.
 
 `HaspMap<String, ArrayList<<String>>`
-- Map of (Libraries => List of URLs where they appear). 
-- Order of Libraries not needed.
+- Map of (Libraries => List of URLs where they appear).
+- Order of keys or values not needed.
+- Order of Libraries not needed here.
 
 `SortedMap<Integer, ArrayList<<String>>`
 - Map of (Ranking positions => List of Libraries with that Ranking).
-- Order of Libraries relevant!
+- Order of keys relevant!
+- Order of values not needed.
 
 ### Improvements
 - Complete JUnit test cases - Test Driven Development
