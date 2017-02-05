@@ -98,15 +98,16 @@ public class ControllerMain {
 		// Implementation 1
 		RankedStringSet sortedMap = new SortedMapOfLibraryRank();
 		System.out.println( "\n# Implementation: " + sortedMap.getClass().getSimpleName() );
-		run(resultLinks, sortedMap);
+		runImplemention(resultLinks, sortedMap);
 
 		// Implementation 2
 		RankedStringSet sortedSet = new SortedSetOfLibraryRank();
 		System.out.println( "\n# Implementation: " + sortedSet.getClass().getSimpleName() );
-		run(resultLinks, sortedSet);
+		runImplemention(resultLinks, sortedSet);
 	}
 
-	private static void run(final List<String> resultLinks, RankedStringSet implementaion) throws Exception {
+	private static void runImplemention(final List<String> resultLinks, RankedStringSet implementaion)
+			throws Exception {
 
 		// Implementation dependent
 		int countLibs = 0;
