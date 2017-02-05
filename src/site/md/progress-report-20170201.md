@@ -108,7 +108,23 @@ The class SortedSetOfLibraryRank.java was the first approach to implement the ra
 
 The class SortedMapOfLibraryRank.java was the second approach to implement the ranking of the JavaScript libraries. It is more elaborated. It allows more features on the underlying data, and it keeps the libraries ranked upon insertion.
 
-## Draft notes
+[...] It continues. Report in-progress [...]
+
+## Improvements
+- Remove inconsistencies in the naming of some variables and methods
+- Complete JUnit test cases - Test Driven Development
+  - Additional testing of the parsing methods.
+  - Additional testing of the URL validation method.
+- Investigate parsing of Google number of result. Expected: N, Actual: (N - x)
+- Use of `<h3>` tag versus "/link:/" attribute to find Google Search result links.
+- Add a Comparator implementation to handle ranking => order Map by value.
+- Re-organize main() method.
+- Remove dependency between *model* classes and ControllerMain.java class due to the LOGGER service.
+- Consider override toString() method instead of custom "print" methods.
+- Consider using Java concurrency to request/parse in parallel the N result links from the Google Search
+- Consider normalizing the format of Javascript library ULRs to group together strings that correspond to the same library but may be spelled differently (e.g. absolute path vs relative path).
+
+## Draft (raw) notes
 
 - **TODO: Do not forget attribution of reused code. !!!**
 
@@ -199,16 +215,3 @@ Using 2 Maps.
 - Map of (Ranking positions => List of Libraries with that Ranking).
 - Order of keys relevant!
 - Order of values not needed.
-
-### Improvements
-- Complete JUnit test cases - Test Driven Development
-  - Additional testing of the parsing methods.
-  - Additional testing of the URL validation method.
-- Investigate parsing of Google number of result. Expected: N, Actual: (N - x)
-- Use of `<h3>` tag versus "/link:/" attribute to find Google Search result links.
-- Add a Comparator implementation to handle ranking => order Map by value.
-- Re-organize main() method.
-- Remove dependency between *model* classes and ControllerMain.java class due to the LOGGER service.
-- Consider override toString() method instead of custom "print" methods.
-
-
