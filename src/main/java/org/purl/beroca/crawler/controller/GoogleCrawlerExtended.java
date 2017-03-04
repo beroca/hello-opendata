@@ -114,11 +114,31 @@ public class GoogleCrawlerExtended {
 				stream = connection.getInputStream();
 				
 				pageContent = getString(stream); // <===== INTENDED CODE PATH =====
-				System.out.println(pageContent);
+				
+				Pattern pattern1 = Pattern.compile("<span[^>]*>IDPs: </span>[^<]*<span[^\\d]*[\\d,]+");
+				Pattern pattern2 = Pattern.compile("[\\d,]+");
+				Matcher m = pattern1.matcher(pageContent);
+				if ( m.find() ) { 
+					
+					String result = m.group();
+				    m = pattern2.matcher(result);					
+				    m.find();
+				}
+				
+				String domainName = m.group(0).trim().replace(",", "");
+				int ipds = Integer.parseInt(domainName);
+				System.out.println("Endlich: " + domainName);
+				
+//				System.out.println(pageContent);
+				
+//				String[] str1 = pageContent.split("IDPs: ");
+//				String[] str2 = str1[1].split("</div>");
+//				System.out.println(str2[0]);
 				
 				
 			} catch (Exception e) {
 				LOGGER.log(Level.SEVERE, e.getClass().getSimpleName() + ": " + e.getMessage()); // , e);
+				e.printStackTrace();
 				System.out.println("# Skipping URL: " + path + " => FAILED connection.getInputStream()");
 			}
 		}
