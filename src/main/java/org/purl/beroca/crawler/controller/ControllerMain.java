@@ -75,7 +75,7 @@ public class ControllerMain {
 
 		System.out.println("# Google Search Parser - SortedMap + SortedSet");
 
-		getMainOptions();
+		// getMainOptions();
 		
 		// Configure LOGGER messages
 		LOGGER.setLevel(ControllerMain.logLevel);
@@ -86,10 +86,10 @@ public class ControllerMain {
 		}
 		
 		// Send query request to Google Search and process response
-		final String query = "https://www.google.com/search?q=" + 
-				URLEncoder.encode(searchTerm, "UTF-8") + 
-				"&num=" + searchHits;
-		System.out.println("# Search Query: " + query);
+		// https://www.cia.gov/library/publications/the-world-factbook/geos/af.html
+		final String query = "https://www.cia.gov/library/publications/the-world-factbook/geos/af.html" + 
+				URLEncoder.encode(searchTerm, "UTF-8");
+		// System.out.println("# Search Query: " + query);
 
 		final String resultPage = urlParser.getSearchContent(query);
 		final List<String> resultLinks = urlParser.parseLinks(resultPage);

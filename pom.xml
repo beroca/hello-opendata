@@ -2,16 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.purl.beroca.crawler</groupId>
-	<artifactId>hello-web-crawler</artifactId>
+	<artifactId>hello-opendata</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Web Crawler Exercise</name>
-	<description>The command-line program should do the following:
-0) Read a string (search term) from standard input
-1) Get a Google result page for the search term
-2) Extract main result links from the page
-3) Download the respective pages and extract the names of javascript libraries used in them
-4) Print top 5 most used libraries to standard output
-</description>
+	<description>Sandbox repo for Open Data Hackhathon 2017</description>
 
 	<dependencies>
 
