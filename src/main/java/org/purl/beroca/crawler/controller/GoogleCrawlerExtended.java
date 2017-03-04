@@ -114,6 +114,8 @@ public class GoogleCrawlerExtended {
 				stream = connection.getInputStream();
 				
 				pageContent = getString(stream); // <===== INTENDED CODE PATH =====
+				System.out.println(pageContent);
+				
 				
 			} catch (Exception e) {
 				LOGGER.log(Level.SEVERE, e.getClass().getSimpleName() + ": " + e.getMessage()); // , e);

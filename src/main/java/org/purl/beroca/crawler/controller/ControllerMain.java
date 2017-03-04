@@ -88,7 +88,7 @@ public class ControllerMain {
 		// Send query request to Google Search and process response
 		// https://www.cia.gov/library/publications/the-world-factbook/geos/af.html
 		final String query = "https://www.cia.gov/library/publications/the-world-factbook/geos/af.html" + 
-				URLEncoder.encode(searchTerm, "UTF-8");
+				URLEncoder.encode("", "UTF-8");
 		// System.out.println("# Search Query: " + query);
 
 		final String resultPage = urlParser.getSearchContent(query);
